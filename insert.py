@@ -4,9 +4,10 @@ import read as data
 
 def user_interface():
     user_choice = input("\nVoulez-vous "
-                        "(L)ister les plantes "
-                        "(A)jouter une plante "
-                        "(S)upprimer une plante "
+                        "(L)ister plantes "
+                        "(A)jouter plante "
+                        "(S)upprimer plante "
+                        "(R)echercher plante "
                         "(Q)uitter : ").upper()
     return user_choice
 
@@ -24,12 +25,21 @@ def add_record(database, cursor):
     database.commit()
 
 
-def delete_record(database, cursor):
+def delete_record(database,cursor):
     data.read_table(database)
     user_deleted_choice = int(input("\nSaisissez l'id de la plante à supprimer : "))
     cursor.execute(
         "DELETE FROM plante WHERE id = {}".format(user_deleted_choice))
     database.commit()
+
+
+def research_record(cursor):
+    user_research_choice = input("\nSaisissez le nom de la plante recherchée : ")
+    cursor.execute(
+        "SELECT * FROM plante WHERE nom LIKE ('%{}%')".format(user_research_choice))
+    result = cursor.fetchall()
+    for record in result:
+        print(record)
 
 
 def main(database,cursor):
@@ -41,6 +51,8 @@ def main(database,cursor):
             add_record(database, cursor)
         elif user_choice == "S":
             delete_record(database, cursor)
+        elif user_choice == "R":
+            research_record(cursor)
         elif user_choice == "Q":
             break
 
