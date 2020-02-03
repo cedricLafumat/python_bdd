@@ -1,8 +1,6 @@
 import mysql.connector
 
 
-
-
 def read_table(db):
     cursor = db.cursor()
     cursor.execute("SELECT * FROM plante")
@@ -12,15 +10,11 @@ def read_table(db):
     for record in result:
         print(record)
 
-    # db.close()
-
 
 if __name__ == '__main__':
     db = mysql.connector.connect(user='cedric', password='Moustic26*',
                                  host='localhost',
-                                 database='herbalist')
+                                 database='herborist')
     read_table(db)
     db.close()
-
-# read_table()
 

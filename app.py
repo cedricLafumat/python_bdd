@@ -1,5 +1,5 @@
 import mysql.connector
-import read as data
+import module as data
 
 
 def user_interface():
@@ -13,14 +13,8 @@ def user_interface():
 
 
 def add_record(database, cursor,id_record,name_record,indication_record,used_piece_record,price_record):
-    # id_record = int(input("Saisissez l'id de votre enregistrement : "))
-    # name_record = input("Saisissez un nom : ")
-    # indication_record = input("Saisissez une indication : ")
-    # used_piece_record = input("Saisissez la partie utilisée : ")
-    # price_record = input("Saisissez le prix : ")
-
     cursor.execute(
-        "INSERT INTO plante (id, nom, indication, partie_utilisee, prix) VALUES ('{}','{}','{}','{}','{}')".format(
+        "INSERT INTO plante (id, name, indication, piece_used, price) VALUES ('{}','{}','{}','{}','{}')".format(
             id_record, name_record, indication_record, used_piece_record, price_record))
     database.commit()
 
@@ -33,7 +27,7 @@ def delete_record(database,cursor,user_deleted_choice):
 
 def research_record(cursor,user_research_choice):
     cursor.execute(
-        "SELECT * FROM plante WHERE nom LIKE ('%{}%')".format(user_research_choice))
+        "SELECT * FROM plante WHERE name LIKE ('%{}%')".format(user_research_choice))
     result = cursor.fetchall()
     return result
 
@@ -62,26 +56,10 @@ def main(database,cursor):
             break
 
 
-    # cursor.execute("UPDATE plante SET partie_utilisee = 'feuilles';")
-    # database.commit()
-    #
-    # cursor.execute('INSERT INTO plante(id, nom, indication, partie_utilisee, prix) VALUES '
-    #                '(1, "Menthe poivrée", "Anesthésiant", "feuiles", 3),'
-    #                '(2, "Absinthe", "Antiseptique", "feuiles", 4),'
-    #                '(3, "Ail", "Antiseptique", "feuiles", 1),'
-    #                '(4, "Basilic", "Antiseptique", "feuiles", 5),'
-    #                '(5, "Carotte", "Digestion", "feuiles", 2.2),'
-    #                '(6, "Aigremoine", "Digestion", "feuiles", 5.4),'
-    #                '(7, "Ronce", "Digestion", "feuiles", 3.21),'
-    #                '(8, "Linaire commune", "Diurétique", "feuiles", 1.12),'
-    #                '(9, "Mélilot officinal", "Diurétique", "feuiles", 13.22);')
-    #
-    # database.commit()
-
 if __name__ == '__main__':
     database = mysql.connector.connect(user='cedric', password='Moustic26*',
                                  host='localhost',
-                                 database='herbalist')
+                                 database='herborist')
     cursor = database.cursor()
     main(database, cursor)
     database.close()
