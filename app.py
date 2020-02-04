@@ -12,22 +12,24 @@ def user_interface():
     return user_choice
 
 
-def add_record(database, cursor,id_record,name_record,indication_record,used_piece_record,price_record):
-    cursor.execute(
-        "INSERT INTO plante (id, name, indication, piece_used, price) VALUES ('{}','{}','{}','{}','{}')".format(
-            id_record, name_record, indication_record, used_piece_record, price_record))
+def add_record(database, cursor,name_record,indication_record,used_piece_record,price_record,family_id_record):
+    val = (name_record, indication_record, used_piece_record, price_record, family_id_record)
+    sql = ("INSERT INTO plante (name, indication, piece_used, price, family_id) VALUES (%s, %s, %s, %s, %s)")
+    cursor.execute(sql, val)
     database.commit()
 
 
 def delete_record(database,cursor,user_deleted_choice):
-    cursor.execute(
-        "DELETE FROM plante WHERE id = {}".format(user_deleted_choice))
+    val = (user_deleted_choice, )
+    sql = "DELETE FROM plante WHERE id = %s"
+    cursor.execute(sql, val)
     database.commit()
 
 
 def research_record(cursor,user_research_choice):
-    cursor.execute(
-        "SELECT * FROM plante WHERE name LIKE ('%{}%')".format(user_research_choice))
+    val = (user_research_choice, )
+    sql = ("SELECT id, name FROM plante WHERE name LIKE CONCAT('%', %s, '%')")
+    cursor.execute(sql, val)
     result = cursor.fetchall()
     return result
 
@@ -38,12 +40,12 @@ def main(database,cursor):
         if user_choice == "L":
             data.read_table(database)
         elif user_choice == "A":
-            id_record = int(input("Saisissez l'id de votre enregistrement : "))
             name_record = input("Saisissez un nom : ")
             indication_record = input("Saisissez une indication : ")
             used_piece_record = input("Saisissez la partie utilisée : ")
             price_record = input("Saisissez le prix : ")
-            add_record(database, cursor,id_record,name_record,indication_record,used_piece_record,price_record)
+            family_id_record = input("Saisissez l'id de la famille : ")
+            add_record(database, cursor,name_record,indication_record,used_piece_record,price_record,family_id_record)
         elif user_choice == "S":
             data.read_table(database)
             user_deleted_choice = int(input("\nSaisissez l'id de la plante à supprimer : "))
